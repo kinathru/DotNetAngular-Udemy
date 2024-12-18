@@ -13,6 +13,7 @@ public class Program
 
         // add mapping
         app.MapControllers();
+        app.MapGet("/", () => Results.Redirect("/api/books"));
 
         app.Run();
     }
