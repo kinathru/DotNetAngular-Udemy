@@ -8,13 +8,21 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
-        builder.Services.AddDbContext<AppDbContext>(options =>
+
+        builder.Services.AddDbContext<AppDbContext>(options => { options.UseInMemoryDatabase("EmployeeDb"); });
+
+        builder.Services.AddCors(options =>
         {
-            options.UseInMemoryDatabase("EmployeeDb");
+            options.AddPolicy("CorsPolicy", corsPolicyBuilder =>
+            {
+                corsPolicyBuilder.WithOrigins("http://localhost:4200")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
         });
-        
+
         var app = builder.Build();
+        app.UseCors("CorsPolicy");
 
         app.MapGet("/", () => "Hello World!");
 
