@@ -1,4 +1,5 @@
 using EmployeeManagement.Data;
+using EmployeeManagement.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManagement;
@@ -21,10 +22,29 @@ public class Program
             });
         });
 
-        var app = builder.Build();
-        app.UseCors("CorsPolicy");
+        builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
-        app.MapGet("/", () => "Hello World!");
+        builder.Services.AddControllers();
+
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
+
+        var app = builder.Build();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
+                    c.RoutePrefix = string.Empty; // display swagger UI for root path
+                }
+            );
+        }
+
+        app.UseCors("CorsPolicy");
+        app.MapControllers();
+
 
         app.Run();
     }
