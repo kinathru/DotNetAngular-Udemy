@@ -34,7 +34,7 @@ public class EmployeeController(IEmployeeRepository repository) : ControllerBase
         return CreatedAtAction(nameof(GetEmployeeById), new { id = employee.Id }, employee);
     }
 
-    [HttpPut]
+    [HttpPut("{id}")]
     public async Task<ActionResult<Employee>> UpdateEmployee(int id, Employee employee)
     {
         if (id != employee.Id)
