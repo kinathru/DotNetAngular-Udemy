@@ -1,5 +1,6 @@
-<h2>Employees</h2>
-<table>
+<h2 class="mt-2">Employees</h2>
+<hr />
+<table class="table table-striped">
   <thead>
     <tr>
       <th>Id</th>
@@ -20,10 +21,20 @@
       <td>{{ employee.email }}</td>
       <td>{{ employee.position }}</td>
       <td>
-        <button type="button" (click)="deleteEmployee(employee.id)">
+        <button
+          class="btn btn-primary me-2"
+          type="button"
+          (click)="editEmployee(employee.id)"
+        >
+          Edit
+        </button>
+        <button
+          class="btn btn-danger"
+          type="button"
+          (click)="deleteEmployee(employee.id)"
+        >
           Delete
         </button>
-        <button type="button" (click)="editEmployee(employee.id)">Edit</button>
       </td>
     </tr>
   </tbody>
