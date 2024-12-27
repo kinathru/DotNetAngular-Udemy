@@ -48,4 +48,21 @@ public class FlightSpecifications
         
         flight.BookingList.Should().ContainEquivalentOf(new Booking("james@test.com", 4));
     }
+
+    [Theory]
+    [InlineData(3,1,1,3)]
+    [InlineData(4,2,2,4)]
+    [InlineData(7,5,4,6)]
+    public void Cancelling_bookings_frees_up_the_seats(int initialCapacity, int numberOfSeatsToBook, int numberOfSeatsToCancel, int remainingNumberOfSeats)
+    {
+        // Given
+        var flight = new Flight(seatCapacity: initialCapacity);
+        flight.Book(passengerEmail: "james@test.com", numberOfSeats: numberOfSeatsToBook);
+        
+        // When
+        flight.CancelBooking(passengerEmail: "james@test.com", numberOfSeats: numberOfSeatsToCancel);
+        
+        // Then
+        flight.RemainingNumberOfSeats.Should().Be(remainingNumberOfSeats);
+    }
 }

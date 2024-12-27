@@ -24,4 +24,9 @@ public class Flight
 
         return null;
     }
+
+    public void CancelBooking(string passengerEmail, int numberOfSeats)
+    {
+        RemainingNumberOfSeats += numberOfSeats;
+    }
 }
