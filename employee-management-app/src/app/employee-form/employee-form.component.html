@@ -1,13 +1,19 @@
 <h2 class="my-2">{{ isEditing ? "Edit" : "Create" }} Employee</h2>
 
-<div class="alert mb-2" *ngIf="errorMessage != ''">
+<div class="alert mb-2 text-danger text-center" *ngIf="errorMessage != ''">
   {{ errorMessage }}
 </div>
 
-<form (ngSubmit)="onSubmit()">
+<form
+  *ngIf="errorMessage === ''"
+  #employeeForm="ngForm"
+  (ngSubmit)="onSubmit()"
+>
   <div class="mb-3">
     <label for="in-first-name" class="form-label">First Name</label>
     <input
+      required
+      #firstName="ngModel"
       type="text"
       class="form-control"
       id="in-first-name"
@@ -15,11 +21,18 @@
       name="firstName"
       [(ngModel)]="employee.firstName"
     />
+    <div *ngIf="firstName.invalid && (firstName.touched || firstName.dirty)">
+      <div class="text-danger" *ngIf="firstName.errors?.['required']">
+        First name is required
+      </div>
+    </div>
   </div>
 
   <div class="mb-3">
     <label for="in-last-name" class="form-label">Last Name</label>
     <input
+      required
+      #lastName="ngModel"
       type="text"
       class="form-control"
       id="in-last-name"
@@ -27,11 +40,18 @@
       name="lastName"
       [(ngModel)]="employee.lastName"
     />
+    <div *ngIf="lastName.invalid && (lastName.touched || lastName.dirty)">
+      <div class="text-danger" *ngIf="lastName.errors?.['required']">
+        Last name is required
+      </div>
+    </div>
   </div>
 
   <div class="mb-3">
-    <label for="in-phone" class="form-label">Last Name</label>
+    <label for="in-phone" class="form-label">Phone</label>
     <input
+      required
+      #phone="ngModel"
       type="phone"
       class="form-control"
       id="in-phone"
@@ -39,11 +59,19 @@
       name="phone"
       [(ngModel)]="employee.phone"
     />
+    <div *ngIf="phone.invalid && (phone.touched || phone.dirty)">
+      <div class="text-danger" *ngIf="phone.errors?.['required']">
+        Phone is required
+      </div>
+    </div>
   </div>
 
   <div class="mb-3">
-    <label for="in-email" class="form-label">Last Name</label>
+    <label for="in-email" class="form-label">Email</label>
     <input
+      required
+      email
+      #email="ngModel"
       type="email"
       class="form-control"
       id="in-email"
@@ -51,11 +79,21 @@
       name="email"
       [(ngModel)]="employee.email"
     />
+    <div *ngIf="email.invalid && (email.touched || email.dirty)">
+      <div class="text-danger" *ngIf="email.errors?.['required']">
+        Email is required
+      </div>
+      <div class="text-danger" *ngIf="email.errors?.['email']">
+        Email is invalid
+      </div>
+    </div>
   </div>
 
   <div class="mb-3">
-    <label for="in-position" class="form-label">Last Name</label>
+    <label for="in-position" class="form-label">Position</label>
     <input
+      required
+      #position="ngModel"
       type="text"
       class="form-control"
       id="in-position"
@@ -63,9 +101,18 @@
       name="position"
       [(ngModel)]="employee.position"
     />
+    <div *ngIf="position.invalid && (position.touched || position.dirty)">
+      <div class="text-danger" *ngIf="position.errors?.['required']">
+        Position is required
+      </div>
+    </div>
   </div>
 
-  <button class="btn btn-primary" type="submit">
+  <button
+    class="btn btn-primary"
+    type="submit"
+    [disabled]="employeeForm.invalid"
+  >
     {{ isEditing ? "Edit" : "Create" }}
   </button>
 </form>
