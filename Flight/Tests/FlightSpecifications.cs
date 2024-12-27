@@ -65,4 +65,21 @@ public class FlightSpecifications
         // Then
         flight.RemainingNumberOfSeats.Should().Be(remainingNumberOfSeats);
     }
+
+    [Fact]
+    public void Doesnt_cancel_bookings_for_passengers_who_have_not_booked()
+    {
+        var flight = new Flight(seatCapacity: 3);
+        var error = flight.CancelBooking(passengerEmail: "ab@test.com", numberOfSeats: 2);
+        error.Should().BeOfType<BookingNotFoundError>();
+    }
+
+    [Fact]
+    public void Returns_null_when_successfully_cancels_a_booking()
+    {
+        var flight = new Flight(seatCapacity: 3);
+        flight.Book("james@test.com", 1);
+        var error = flight.CancelBooking("james@test.com", 1);
+        error.Should().BeNull();
+    }
 }

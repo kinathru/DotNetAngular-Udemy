@@ -25,8 +25,14 @@ public class Flight
         return null;
     }
 
-    public void CancelBooking(string passengerEmail, int numberOfSeats)
+    public object? CancelBooking(string passengerEmail, int numberOfSeats)
     {
+        if (_bookingList.All(booking => booking.PassengerEmail != passengerEmail))
+        {
+            return new BookingNotFoundError();
+        }
+
         RemainingNumberOfSeats += numberOfSeats;
+        return null;
     }
 }
