@@ -6,9 +6,9 @@ namespace Tests;
 public class FlightSpecifications
 {
     [Theory]
-    [InlineData(3,1,2)]
-    [InlineData(6,3,3)]
-    [InlineData(10,6,4)]
+    [InlineData(3, 1, 2)]
+    [InlineData(6, 3, 3)]
+    [InlineData(10, 6, 4)]
     public void Booking_reduces_the_number_of_seats(int seatCapacity, int numberOfSeats, int remainingNumberOfSeats)
     {
         var flight = new Flight(seatCapacity: seatCapacity);
@@ -23,10 +23,10 @@ public class FlightSpecifications
     {
         // Given
         var flight = new Flight(seatCapacity: 3);
-        
+
         // When
         var error = flight.Book("james@test.com", 4);
-        
+
         // Then
         error.Should().BeOfType<OverBookingError>();
     }
@@ -37,5 +37,15 @@ public class FlightSpecifications
         var flight = new Flight(seatCapacity: 3);
         var error = flight.Book("james@test.com", 1);
         error.Should().BeNull();
+    }
+
+    [Fact]
+    public void Remembers_bookings()
+    {
+        var flight = new Flight(seatCapacity: 150);
+        
+        flight.Book(passengerEmail: "james@test.com", numberOfSeats: 4);
+        
+        flight.BookingList.Should().ContainEquivalentOf(new Booking("james@test.com", 4));
     }
 }
