@@ -17,6 +17,7 @@ public class Flight
         }
 
         RemainingNumberOfSeats -= numberOfSeats;
+        
         return null;
     }
 }
