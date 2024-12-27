@@ -1,4 +1,4 @@
-﻿namespace Domain.Tests;
+﻿namespace Domain;
 
 public class Flight
 {
@@ -9,8 +9,8 @@ public class Flight
         RemainingNumberOfSeats = seatCapacity;
     }
 
-    public void Book(string v1, int v2)
+    public void Book(string passengerEmail, int numberOfSeats)
     {
-        RemainingNumberOfSeats -= v2;
+        RemainingNumberOfSeats -= numberOfSeats;
     }
 }

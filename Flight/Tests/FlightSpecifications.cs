@@ -1,9 +1,9 @@
-﻿using Domain.Tests;
+﻿using Domain;
 using FluentAssertions;
 
 namespace Tests;
 
-public class FlightTests
+public class FlightSpecifications
 {
     [Fact]
     public void Booking_reduces_the_number_of_seats()
