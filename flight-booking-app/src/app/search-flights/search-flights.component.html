@@ -89,7 +89,11 @@
 
             <i class="fas fa-usd">{{ flight.price }}</i>
             <br />
-            <a class="btn btn-secondary btn-lg mt-2">
+            <a
+              class="btn btn-secondary btn-lg mt-2"
+              [routerLink]="['/book-flight', flight.id]"
+              routerLinkActive="router-link-active"
+            >
               <i class="fas fa-ticket"></i>
               Book
             </a>
@@ -102,7 +106,9 @@
               ></i>
             </div>
             <div class="col">
-              <i class="fa-solid fa-location-dot">{{ flight.arrival?.place }}</i>
+              <i class="fa-solid fa-location-dot">{{
+                flight.arrival?.place
+              }}</i>
             </div>
             <div class="col">
               <i class="fa-regular"></i>

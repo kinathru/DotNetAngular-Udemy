@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FlightService } from '../api/services';
 import { FlightRm } from '../api/models';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-search-flights',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './search-flights.component.html',
   styleUrl: './search-flights.component.css',
 })

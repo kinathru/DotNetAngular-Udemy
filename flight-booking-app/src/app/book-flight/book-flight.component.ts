@@ -1,20 +1,21 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-book-flight',
   standalone: true,
   imports: [],
   templateUrl: './book-flight.component.html',
-  styleUrl: './book-flight.component.css'
+  styleUrl: './book-flight.component.css',
 })
-export class BookFlightComponent implements OnInit{
+export class BookFlightComponent implements OnInit {
+  constructor(private route: ActivatedRoute) {}
 
-  constructor(){
-    
-  }
+  filightId: string = 'not loaded';
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.route.paramMap.subscribe(
+      (p) => (this.filightId = p.get('flightId') ?? 'not passed')
+    );
   }
-
 }
