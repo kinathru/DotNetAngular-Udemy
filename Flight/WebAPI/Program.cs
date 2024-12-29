@@ -1,3 +1,5 @@
+using Microsoft.OpenApi.Models;
+
 namespace WebAPI;
 
 public class Program
@@ -20,7 +22,14 @@ public class Program
         builder.Services.AddControllers();
 
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.AddServer(new OpenApiServer
+            {
+                Description = "Development Server",
+                Url = "https://localhost:7155"
+            });
+        });
 
         var app = builder.Build();
 
