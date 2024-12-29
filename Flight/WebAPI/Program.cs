@@ -24,8 +24,6 @@ public class Program
 
         var app = builder.Build();
 
-        app.MapGet("/hello", () => "Hello World!");
-
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
