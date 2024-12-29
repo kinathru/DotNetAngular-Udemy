@@ -100,6 +100,7 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
         )
     ];
     
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     [HttpGet("{flightId}")]
     public ActionResult<FlightRm?> Find(Guid flightId)
     {
