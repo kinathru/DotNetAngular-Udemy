@@ -103,7 +103,13 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
     [HttpGet("{flightId}")]
     public ActionResult<FlightRm?> Find(Guid flightId)
     {
-        return Ok(DummyFlightRms.FirstOrDefault(f => f.Id == flightId));
+        var flight = DummyFlightRms.FirstOrDefault(f => f.Id == flightId);
+        if (flight == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(flight);
     }
 
     [HttpGet]
