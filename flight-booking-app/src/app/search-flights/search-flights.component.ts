@@ -24,6 +24,7 @@ export class SearchFlightsComponent implements OnInit {
         this.searchResult = response;
       },
       error: (err) => {
+        console.log('Response Error. Status : ', err.status);
         console.log(err);
       },
     });
