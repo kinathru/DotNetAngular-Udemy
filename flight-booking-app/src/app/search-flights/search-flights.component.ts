@@ -18,8 +18,13 @@ export class SearchFlightsComponent implements OnInit {
   ngOnInit(): void {}
 
   search() {
-    this.flightService.flightGet().subscribe((response) => {
-      this.searchResult = response;
+    this.flightService.searchFlight().subscribe({
+      next: (response) => {
+        this.searchResult = response;
+      },
+      error: (err) => {
+        console.log(err);
+      },
     });
   }
 }

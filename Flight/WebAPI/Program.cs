@@ -29,6 +29,8 @@ public class Program
                 Description = "Development Server",
                 Url = "https://localhost:7155"
             });
+            options.CustomOperationIds(e =>
+                $"{e.ActionDescriptor.RouteValues["action"] + e.ActionDescriptor.RouteValues["controller"]}");
         });
 
         var app = builder.Build();
