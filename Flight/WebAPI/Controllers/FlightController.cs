@@ -101,6 +101,9 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
     ];
     
     [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(FlightRm), StatusCodes.Status200OK)]
     [HttpGet("{flightId}")]
     public ActionResult<FlightRm?> Find(Guid flightId)
     {
@@ -113,6 +116,9 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
         return Ok(flight);
     }
 
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(typeof(IEnumerable<FlightRm>), StatusCodes.Status200OK)]
     [HttpGet]
     public ActionResult<IEnumerable<FlightRm>> Search()
     {
