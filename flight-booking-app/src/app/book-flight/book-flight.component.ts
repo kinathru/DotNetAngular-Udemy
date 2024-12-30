@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FlightService } from '../api/services';
 import { FlightRm } from '../api/models';
 import { CommonModule } from '@angular/common';
@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class BookFlightComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private flightService: FlightService
   ) {}
 
@@ -35,6 +36,7 @@ export class BookFlightComponent implements OnInit {
       error: (err) => {
         if (err.status == 404) {
           alert('Flight Not Found');
+          this.router.navigate(['/search-flights']);
         }
 
         console.log('Response Error. Status : ', err.status);
