@@ -68,8 +68,13 @@ export class BookFlightComponent implements OnInit {
       passengerEmail: this.authService.currentUser?.email,
       numberOfSeats: this.form.get('number')?.value ?? 0,
     };
-    this.flightService
-      .bookFlight({ body: booking })
-      .subscribe((_) => console.log('succeeded', console.error));
+    this.flightService.bookFlight({ body: booking }).subscribe({
+      next: () => {
+        this.router.navigate(['/my-booking']);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
   }
 }
