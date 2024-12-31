@@ -8,16 +8,16 @@ import { filter, map } from 'rxjs/operators';
 import { StrictHttpResponse } from '../../strict-http-response';
 import { RequestBuilder } from '../../request-builder';
 
-import { NewPassengerDto } from '../../models/new-passenger-dto';
+import { PassengerRm } from '../../models/passenger-rm';
 
-export interface RegisterPassenger$Params {
-      body?: NewPassengerDto
+export interface FindPassenger$Params {
+  email: string;
 }
 
-export function registerPassenger(http: HttpClient, rootUrl: string, params?: RegisterPassenger$Params, context?: HttpContext): Observable<StrictHttpResponse<NewPassengerDto>> {
-  const rb = new RequestBuilder(rootUrl, registerPassenger.PATH, 'post');
+export function findPassenger(http: HttpClient, rootUrl: string, params: FindPassenger$Params, context?: HttpContext): Observable<StrictHttpResponse<PassengerRm>> {
+  const rb = new RequestBuilder(rootUrl, findPassenger.PATH, 'get');
   if (params) {
-    rb.body(params.body, 'application/*+json');
+    rb.path('email', params.email, {});
   }
 
   return http.request(
@@ -25,9 +25,9 @@ export function registerPassenger(http: HttpClient, rootUrl: string, params?: Re
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
-      return r as StrictHttpResponse<NewPassengerDto>;
+      return r as StrictHttpResponse<PassengerRm>;
     })
   );
 }
 
-registerPassenger.PATH = '/Passenger';
+findPassenger.PATH = '/Passenger/{email}';

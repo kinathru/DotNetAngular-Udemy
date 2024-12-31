@@ -10,18 +10,18 @@ import { RequestBuilder } from '../../request-builder';
 
 import { NewPassengerDto } from '../../models/new-passenger-dto';
 
-export interface RegisterPassenger$Params {
+export interface RegisterPassenger$Plain$Params {
       body?: NewPassengerDto
 }
 
-export function registerPassenger(http: HttpClient, rootUrl: string, params?: RegisterPassenger$Params, context?: HttpContext): Observable<StrictHttpResponse<NewPassengerDto>> {
-  const rb = new RequestBuilder(rootUrl, registerPassenger.PATH, 'post');
+export function registerPassenger$Plain(http: HttpClient, rootUrl: string, params?: RegisterPassenger$Plain$Params, context?: HttpContext): Observable<StrictHttpResponse<NewPassengerDto>> {
+  const rb = new RequestBuilder(rootUrl, registerPassenger$Plain.PATH, 'post');
   if (params) {
     rb.body(params.body, 'application/*+json');
   }
 
   return http.request(
-    rb.build({ responseType: 'json', accept: 'text/json', context })
+    rb.build({ responseType: 'text', accept: 'text/plain', context })
   ).pipe(
     filter((r: any): r is HttpResponse<any> => r instanceof HttpResponse),
     map((r: HttpResponse<any>) => {
@@ -30,4 +30,4 @@ export function registerPassenger(http: HttpClient, rootUrl: string, params?: Re
   );
 }
 
-registerPassenger.PATH = '/Passenger';
+registerPassenger$Plain.PATH = '/Passenger';
