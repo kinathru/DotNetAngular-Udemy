@@ -102,7 +102,7 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
     ];
 
     private static readonly IList<BookDto> Bookings = [];
-    
+
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -129,8 +129,20 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
     }
 
     [HttpPost]
-    public void Book(BookDto dto)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public ActionResult Book(BookDto dto)
     {
         System.Diagnostics.Debug.WriteLine($"Booking a new flight {dto.FlightId}");
+        var flightFound = DummyFlightRms.Any(f => f.Id == dto.FlightId);
+        if (!flightFound)
+        {
+            return NotFound();
+        }
+
+        Bookings.Add(dto);
+        return CreatedAtAction(nameof(Find), new { flightId = dto.FlightId }, null);
     }
 }
