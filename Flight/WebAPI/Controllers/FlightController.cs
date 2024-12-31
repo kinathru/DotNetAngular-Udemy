@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAPI.Controllers.Dtos;
 using WebAPI.ReadModels;
 
 namespace WebAPI.Controllers;
@@ -99,6 +100,8 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
             18
         )
     ];
+
+    private static readonly IList<BookDto> Bookings = [];
     
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -123,5 +126,11 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
     public ActionResult<IEnumerable<FlightRm>> Search()
     {
         return Ok(DummyFlightRms);
+    }
+
+    [HttpPost]
+    public void Book(BookDto dto)
+    {
+        System.Diagnostics.Debug.WriteLine($"Booking a new flight {dto.FlightId}");
     }
 }

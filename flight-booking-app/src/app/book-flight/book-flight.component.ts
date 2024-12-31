@@ -4,11 +4,12 @@ import { FlightService } from '../api/services';
 import { FlightRm } from '../api/models';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth/auth.service';
+import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-book-flight',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './book-flight.component.html',
   styleUrl: './book-flight.component.css',
 })
@@ -17,12 +18,16 @@ export class BookFlightComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private flightService: FlightService,
-    private authService: AuthService
+    private authService: AuthService,
+    private fb: FormBuilder
   ) {}
 
   filightId: string = 'not loaded';
   flight: FlightRm = {};
-  number: number = 0;
+
+  form = this.fb.group({
+    number: [1],
+  });
 
   ngOnInit(): void {
     if (!this.authService.currentUser) {
@@ -50,4 +55,21 @@ export class BookFlightComponent implements OnInit {
       },
     });
   };
+
+  book() {
+    console.log(
+      `Booking ${this.form.get('number')?.value} passengers for the flight ${
+        this.flight.id
+      }`
+    );
+
+    const booking = {
+      flightId: this.flight.id,
+      passengerEmail: this.authService.currentUser?.email,
+      numberOfSeats: this.form.get('number')?.value ?? 0,
+    };
+    this.flightService
+      .bookFlight({ body: booking })
+      .subscribe((_) => console.log('succeeded', console.error));
+  }
 }
