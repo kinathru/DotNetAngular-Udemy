@@ -12,16 +12,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddDbContext<Entities>(
-            options =>
-            {
-                var connectionString =
-                    "Server=localhost,61077;" +
-                    "Database=Flights;" +
-                    "User Id=flights_api;" +
-                    "Password=1234!Secret;" +
-                    "TrustServerCertificate=True;";
-                options.UseSqlServer(connectionString);
-            });
+            options => { options.UseSqlServer(builder.Configuration.GetConnectionString("Flights")); });
 
         builder.Services.AddCors(options =>
         {
