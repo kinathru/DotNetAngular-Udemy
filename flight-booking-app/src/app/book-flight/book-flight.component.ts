@@ -4,7 +4,12 @@ import { FlightService } from '../api/services';
 import { FlightRm } from '../api/models';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../auth/auth.service';
-import { FormsModule, ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-book-flight',
@@ -26,7 +31,14 @@ export class BookFlightComponent implements OnInit {
   flight: FlightRm = {};
 
   form = this.fb.group({
-    number: [1],
+    number: [
+      1,
+      Validators.compose([
+        Validators.required,
+        Validators.min(1),
+        Validators.max(254),
+      ]),
+    ],
   });
 
   ngOnInit(): void {
@@ -76,5 +88,9 @@ export class BookFlightComponent implements OnInit {
         console.log(err);
       },
     });
+  }
+
+  get number(){
+    return this.form.controls.number;
   }
 }
