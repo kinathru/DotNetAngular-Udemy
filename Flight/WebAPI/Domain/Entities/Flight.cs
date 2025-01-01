@@ -53,7 +53,7 @@ public class Flight
         }
 
         Bookings.Remove(booking);
-        RemainingNumberOfSeats -= booking.NumberOfSeats;
+        RemainingNumberOfSeats += booking.NumberOfSeats;
         
         return null;
     }
