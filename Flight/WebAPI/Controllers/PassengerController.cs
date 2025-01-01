@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebAPI.Controllers.Dtos;
+using WebAPI.Domain.Entities;
 
 namespace WebAPI.Controllers;
 
@@ -7,7 +8,7 @@ namespace WebAPI.Controllers;
 [Route("[controller]")]
 public class PassengerController : ControllerBase
 {
-    private static readonly List<NewPassengerDto> Passengers = new();
+    private static readonly List<Passenger> Passengers = new();
 
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
@@ -15,7 +16,7 @@ public class PassengerController : ControllerBase
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public ActionResult<NewPassengerDto?> Register(NewPassengerDto dto)
     {
-        Passengers.Add(dto);
+        Passengers.Add(new Passenger(dto.Email, dto.FirstName, dto.LastName, dto.Gender));
         System.Diagnostics.Debug.WriteLine(Passengers.Count);
         return CreatedAtAction(nameof(Find), new { email = dto.Email }, dto);
     }
