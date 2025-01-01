@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { BookingRm } from '../api/models';
 import { BookingService } from '../api/services';
 import { AuthService } from '../auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-bookings',
@@ -16,9 +17,14 @@ export class MyBookingsComponent implements OnInit {
 
   constructor(
     private bookingService: BookingService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {}
   ngOnInit(): void {
+    if (!this.authService.currentUser?.email) {
+      this.router.navigate(['/register-passenger']);
+    }
+
     this.bookingService
       .listBooking({ email: this.authService.currentUser?.email ?? '' })
       .subscribe({
