@@ -40,4 +40,21 @@ public class Flight
 
         return null;
     }
+
+    public object? CancelBooking(string passengerEmail, byte numberOfSeats)
+    {
+        var booking = Bookings.SingleOrDefault(b =>
+            string.Equals(b.PassengerEmail, passengerEmail, StringComparison.CurrentCultureIgnoreCase) &&
+            b.NumberOfSeats == numberOfSeats);
+
+        if (booking == null)
+        {
+            return new NotFoundError();
+        }
+
+        Bookings.Remove(booking);
+        RemainingNumberOfSeats -= booking.NumberOfSeats;
+        
+        return null;
+    }
 }
