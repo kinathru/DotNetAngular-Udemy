@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebAPI.Controllers.Dtos;
 using WebAPI.Data;
 using WebAPI.Domain.Entities;
@@ -72,7 +73,14 @@ public class FlightController(ILogger<FlightController> logger, Entities entitie
             return Conflict(new { message = "Not enough seats" });
         }
 
-        entities.SaveChanges();
+        try
+        {
+            entities.SaveChanges();
+        }
+        catch (DbUpdateConcurrencyException e)
+        {
+            return Conflict(new { message = "An error occurred while processing your request. Please try again." });
+        }
 
         return CreatedAtAction(nameof(Find), new { flightId = dto.FlightId }, null);
     }
