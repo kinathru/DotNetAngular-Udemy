@@ -86,11 +86,16 @@ export class BookFlightComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
+
+        if (err.status == 409) {
+          console.log('Error : ' + err);
+          alert(JSON.parse(err.error).message);
+        }
       },
     });
   }
 
-  get number(){
+  get number() {
     return this.form.controls.number;
   }
 }

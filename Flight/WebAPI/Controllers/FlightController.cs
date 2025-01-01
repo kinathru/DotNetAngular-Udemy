@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebAPI.Controllers.Dtos;
 using WebAPI.Domain.Entities;
+using WebAPI.Domain.Entities.Errors;
 using WebAPI.ReadModels;
 
 namespace WebAPI.Controllers;
@@ -17,7 +18,7 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
             "$450",
             new TimePlace("Los Angeles", new DateTime(2024, 12, 28, 10, 0, 0)),
             new TimePlace("New York", new DateTime(2024, 12, 28, 14, 30, 0)),
-            20
+            2
         ),
 
         new(
@@ -101,7 +102,7 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
             18
         )
     ];
-    
+
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -161,7 +162,12 @@ public class FlightController(ILogger<FlightController> logger) : ControllerBase
             return NotFound();
         }
 
-        flight.Bookings.Add(new Booking(dto.FlightId, dto.PassengerEmail, dto.NumberOfSeats));
+        var error = flight.MakeBooking(dto.PassengerEmail, dto.NumberOfSeats);
+        if (error is OverBookError)
+        {
+            return Conflict(new { message = "Not enough seats" });
+        }
+
         return CreatedAtAction(nameof(Find), new { flightId = dto.FlightId }, null);
     }
 }
