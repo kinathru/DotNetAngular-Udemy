@@ -11,8 +11,17 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddDbContext<Entities>(options => { options.UseInMemoryDatabase(databaseName: "Flights"); },
-            ServiceLifetime.Singleton);
+        builder.Services.AddDbContext<Entities>(
+            options =>
+            {
+                var connectionString =
+                    "Server=localhost,61077;" +
+                    "Database=Flights;" +
+                    "User Id=flights_api;" +
+                    "Password=1234!Secret;" +
+                    "TrustServerCertificate=True;";
+                options.UseSqlServer(connectionString);
+            });
 
         builder.Services.AddCors(options =>
         {
@@ -39,11 +48,13 @@ public class Program
                 $"{e.ActionDescriptor.RouteValues["action"] + e.ActionDescriptor.RouteValues["controller"]}");
         });
 
-        builder.Services.AddSingleton<Entities>();
+        builder.Services.AddScoped<Entities>();
 
         var app = builder.Build();
 
         var entities = app.Services.CreateScope().ServiceProvider.GetRequiredService<Entities>();
+        entities.Database.EnsureCreated();
+
         List<Flight> flightsToSeed =
         [
             new(
