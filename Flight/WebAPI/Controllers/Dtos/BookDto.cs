@@ -1,3 +1,8 @@
-﻿namespace WebAPI.Controllers.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record BookDto(Guid FlightId, string PassengerEmail, byte NumberOfSeats);
+namespace WebAPI.Controllers.Dtos;
+
+public record BookDto(
+    [Required] Guid FlightId,
+    [Required] [EmailAddress] string PassengerEmail,
+    [Required] [Range(1, 254)] byte NumberOfSeats);

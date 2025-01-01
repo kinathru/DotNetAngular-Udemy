@@ -1,3 +1,15 @@
-﻿namespace WebAPI.Controllers.Dtos;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record NewPassengerDto(string Email, string FirstName, string LastName, bool Gender);
+namespace WebAPI.Controllers.Dtos;
+
+public record NewPassengerDto(
+    [Required]
+    [EmailAddress]
+    [StringLength(100, MinimumLength = 3)]
+    string Email,
+    [Required]
+    [MinLength(2)]
+    [MaxLength(35)]
+    string FirstName,
+    [Required] string LastName,
+    [Required] bool Gender);
