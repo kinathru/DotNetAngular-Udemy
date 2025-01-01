@@ -11,7 +11,6 @@ namespace WebAPI.Controllers;
 [Route("[controller]")]
 public class FlightController(ILogger<FlightController> logger, Entities entities) : ControllerBase
 {
-
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -19,7 +18,7 @@ public class FlightController(ILogger<FlightController> logger, Entities entitie
     [HttpGet("{flightId}")]
     public ActionResult<FlightRm?> Find(Guid flightId)
     {
-        var flight =  entities.Flights.FirstOrDefault(f => f.Id == flightId);
+        var flight = entities.Flights.FirstOrDefault(f => f.Id == flightId);
         if (flight == null)
         {
             return NotFound();
@@ -42,17 +41,13 @@ public class FlightController(ILogger<FlightController> logger, Entities entitie
     [HttpGet]
     public ActionResult<IEnumerable<FlightRm>> Search()
     {
-        var flightRmList = entities.Flights.Select(flight =>
-        {
-            var flightReadModel = new FlightRm(
-                flight.Id,
-                flight.Airline,
-                flight.Price,
-                new TimePlaceRm(flight.Departure.Place, flight.Departure.Time),
-                new TimePlaceRm(flight.Arrival.Place, flight.Arrival.Time),
-                flight.RemainingNumberOfSeats);
-            return flightReadModel;
-        }).ToList();
+        var flightRmList = entities.Flights.Select(flight => new FlightRm(
+            flight.Id,
+            flight.Airline,
+            flight.Price,
+            new TimePlaceRm(flight.Departure.Place, flight.Departure.Time),
+            new TimePlaceRm(flight.Arrival.Place, flight.Arrival.Time),
+            flight.RemainingNumberOfSeats)).ToList();
 
         return Ok(flightRmList);
     }
@@ -76,6 +71,8 @@ public class FlightController(ILogger<FlightController> logger, Entities entitie
         {
             return Conflict(new { message = "Not enough seats" });
         }
+
+        entities.SaveChanges();
 
         return CreatedAtAction(nameof(Find), new { flightId = dto.FlightId }, null);
     }

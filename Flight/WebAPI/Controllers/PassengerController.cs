@@ -16,7 +16,7 @@ public class PassengerController(Entities entities) : ControllerBase
     public ActionResult<NewPassengerDto?> Register(NewPassengerDto dto)
     {
         entities.Passengers.Add(new Passenger(dto.Email, dto.FirstName, dto.LastName, dto.Gender));
-        System.Diagnostics.Debug.WriteLine(entities.Passengers.Count);
+        entities.SaveChanges();
         return CreatedAtAction(nameof(Find), new { email = dto.Email }, dto);
     }
 

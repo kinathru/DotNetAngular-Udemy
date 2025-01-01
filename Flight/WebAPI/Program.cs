@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using WebAPI.Data;
 using WebAPI.Domain.Entities;
@@ -9,6 +10,9 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        builder.Services.AddDbContext<Entities>(options => { options.UseInMemoryDatabase(databaseName: "Flights"); },
+            ServiceLifetime.Singleton);
 
         builder.Services.AddCors(options =>
         {
@@ -133,6 +137,7 @@ public class Program
             )
         ];
         entities.Flights.AddRange(flightsToSeed);
+        entities.SaveChanges();
 
         if (app.Environment.IsDevelopment())
         {

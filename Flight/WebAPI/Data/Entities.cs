@@ -1,10 +1,22 @@
-﻿using WebAPI.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using WebAPI.Domain.Entities;
 
 namespace WebAPI.Data;
 
-public class Entities
+public class Entities : DbContext
 {
-    public readonly List<Passenger> Passengers = new();
+    public DbSet<Passenger> Passengers => Set<Passenger>();
+    public DbSet<Flight> Flights => Set<Flight>();
 
-    public readonly List<Flight> Flights = [];
+    public Entities(DbContextOptions options) : base(options)
+    {
+    }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Passenger>().HasKey(p => p.Email);
+        
+        modelBuilder.Entity<Flight>().OwnsOne(f => f.Departure);
+        modelBuilder.Entity<Flight>().OwnsOne(f => f.Arrival);
+    }
 }
