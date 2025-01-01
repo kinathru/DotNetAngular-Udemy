@@ -1,4 +1,5 @@
 using Microsoft.OpenApi.Models;
+using WebAPI.Data;
 
 namespace WebAPI;
 
@@ -32,6 +33,8 @@ public class Program
             options.CustomOperationIds(e =>
                 $"{e.ActionDescriptor.RouteValues["action"] + e.ActionDescriptor.RouteValues["controller"]}");
         });
+
+        builder.Services.AddSingleton<Entities>();
 
         var app = builder.Build();
 
