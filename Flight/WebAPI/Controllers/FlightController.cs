@@ -40,15 +40,50 @@ public class FlightController(ILogger<FlightController> logger, Entities entitie
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     [ProducesResponseType(typeof(IEnumerable<FlightRm>), StatusCodes.Status200OK)]
     [HttpGet]
-    public ActionResult<IEnumerable<FlightRm>> Search()
+    public ActionResult<IEnumerable<FlightRm>> Search([FromQuery] FlightSearchParameters @params)
     {
-        var flightRmList = entities.Flights.Select(flight => new FlightRm(
-            flight.Id,
-            flight.Airline,
-            flight.Price,
-            new TimePlaceRm(flight.Departure.Place, flight.Departure.Time),
-            new TimePlaceRm(flight.Arrival.Place, flight.Arrival.Time),
-            flight.RemainingNumberOfSeats)).ToList();
+        Console.WriteLine(@params.ToString());
+
+        IQueryable<Flight> flights = entities.Flights;
+
+        if (!string.IsNullOrWhiteSpace(@params.From))
+        {
+            flights = flights.Where(f => f.Departure.Place.Contains(@params.From));
+        }
+
+        if (!string.IsNullOrWhiteSpace(@params.Destination))
+        {
+            flights = flights.Where(f => f.Arrival.Place.Contains(@params.Destination));
+        }
+
+        if (!string.IsNullOrWhiteSpace(@params.Destination))
+        {
+            flights = flights.Where(f => f.Arrival.Place.Contains(@params.Destination));
+        }
+
+        if (@params.FromDate != null)
+        {
+            flights = flights.Where(f => f.Departure.Time >= @params.FromDate);
+        }
+
+        if (@params.ToDate != null)
+        {
+            flights = flights.Where(f => f.Departure.Time <= @params.ToDate);
+        }
+
+        if (@params.NumberOfPassengers > 0)
+        {
+            flights = flights.Where(f => f.RemainingNumberOfSeats >= @params.NumberOfPassengers);
+        }
+
+        var flightRmList = flights
+            .Select(flight => new FlightRm(
+                flight.Id,
+                flight.Airline,
+                flight.Price,
+                new TimePlaceRm(flight.Departure.Place, flight.Departure.Time),
+                new TimePlaceRm(flight.Arrival.Place, flight.Arrival.Time),
+                flight.RemainingNumberOfSeats)).ToList();
 
         return Ok(flightRmList);
     }

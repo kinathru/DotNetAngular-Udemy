@@ -30,6 +30,7 @@ public class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen(options =>
         {
+            options.DescribeAllParametersInCamelCase();
             options.AddServer(new OpenApiServer
             {
                 Description = "Development Server",
